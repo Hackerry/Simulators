@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -18,9 +19,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -42,6 +45,7 @@ public class ProjectileMotionSim extends Application {
     private GraphicsContext gc;
     private boolean drawPath = true;
     private CheckBox showGrid, showPath;
+    private Arrow arrow;
 
     @Override
     public void start(Stage stage) {
@@ -82,7 +86,11 @@ public class ProjectileMotionSim extends Application {
         
         generateGrid(pane, gridLength);
         
-        pane.getChildren().addAll(canvas, ball, X, Y);
+        arrow = new Arrow();
+        arrow.moveTo(originX, originY);
+        arrow.setRotation(60);
+        
+        pane.getChildren().addAll(canvas, ball, X, Y, arrow);
     }
     
     private void generateGrid(Pane pane, int length) {
@@ -120,6 +128,20 @@ public class ProjectileMotionSim extends Application {
         velocityL.setTextAlignment(TextAlignment.RIGHT);velocityL.setFont(Font.font("Times New Roman", FontWeight.BOLD, 20));
         angleBox.getChildren().addAll(angleL, angleI);
         velocityBox.getChildren().addAll(velocityL, velocityI);
+        
+        angleI.setOnKeyReleased(e -> {
+            if(e.isControlDown()) {
+                if(e.getCode() == KeyCode.V) e.consume();
+            }
+            if(angleI.getText().isEmpty()) arrow.setRotation(90);
+            double d;
+            try {
+                d = Double.parseDouble(angleI.getText());
+                if(d < 0 || d > 90) return;
+                arrow.setRotation(90-d);
+            } catch(Exception ex) {return;}
+            
+        });
         
         Button reset = new Button("Reset"), fire = new Button("Fire"), clear = new Button("Clear");
         fire.setOnAction(e -> {
@@ -265,6 +287,29 @@ public class ProjectileMotionSim extends Application {
         Scene scene = new Scene(box);
         stage.setScene(scene);
         stage.show();
+    }
+    
+    private class Arrow extends Group {
+        public static final double half = 5.0, line = 30.0;
+        private Rotate rotation = null;
+        public Arrow() {
+            Polygon tri = new Polygon();
+            tri.getPoints().addAll(half,0.0,0.0,2*half,2*half,2*half);
+            
+            Line l = new Line(half,2*half,half,2*half+line);
+            this.getChildren().addAll(tri, l);
+            
+            rotation = new Rotate(0, half, 2*half+line);
+            this.getTransforms().add(rotation);
+        }
+        public void moveTo(double X, double Y) {
+            this.setLayoutX(X-half);
+            this.setLayoutY(Y-line-2*half);
+        }
+        
+        public void setRotation(double angle) {
+            rotation.setAngle(angle);
+        }
     }
     
     public static void main(String[] args) {
