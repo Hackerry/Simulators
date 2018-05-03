@@ -153,7 +153,7 @@ public class ProjectileMotionSim extends Application {
                 return;
             }
 
-            if(angle < 0 || angle > 90) {reportError(); return;}
+            if(angle < 0 || angle > 90 || velocity < 0) {reportError(); return;}
             fire.setDisable(true);
             showPath.setDisable(true);
             reset.setDisable(false);
