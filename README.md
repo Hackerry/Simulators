@@ -1,2 +1,2 @@
-# Physics-Simulators
-I intend to make several physics simulators on kinetic motion.
+# Simulators
+Here is a group of simulators just for fun.
