@@ -31,7 +31,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class Visualizer extends Application {
+public class DFSBSFVisualizer extends Application {
     private static final int WIDTH = 800, HEIGHT = 800, CONTROL_WIDTH = 200;
     private static final Color WALL = Color.BLACK, VISITED = Color.DARKSEAGREEN, EMPTY = Color.WHITE,
             START = Color.RED, END = Color.BLUEVIOLET, ONPATH = Color.YELLOW;
