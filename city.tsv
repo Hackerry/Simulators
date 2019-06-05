@@ -1,0 +1,104 @@
+Vancouver	80	78
+Calgary	180	67
+Winnipeg	360	75
+Montreal	696	66
+SaultSaintMarie	550	120
+Seattle	76	123
+Toronto	630	130
+Boston	750	110
+Portland	60	164
+Helena	260	170
+Duluth	440	166
+NewYork	700	165
+SaltLakeCity	200	270
+Denver	300	290
+Omaha	420	240
+Chicago	540	215
+Pittsburgh	640	200
+Washington	716	240
+SanFrancisco	50	315
+KansasCity	435	280
+SaintLouis	500	300
+Raleigh	700	285
+OklahomaCity	420	340
+LittleRock	490	360
+Nashville	580	330
+LasVegas	160	350
+SantaFe	300	360
+Atlanta	640	360
+Charleston	700	380
+LosAngeles	111	395
+Phoenix	220	390
+ElPaso	300	425
+Dallas	440	415
+Houston	470	450
+NewOrleans	550	440
+Miami	700	460
+
+0	1
+0	5
+1	2
+1	9
+1	5
+2	9
+2	10
+2	4
+4	10
+4	6
+4	3
+6	3
+6	16
+3	7
+3	11
+5	9
+5	8
+9	10
+9	12
+9	13
+9	14
+10	14
+10	15
+15	16
+15	20
+15	14
+16	11
+16	17
+11	17
+11	7
+8	18
+8	12
+18	12
+18	29
+29	30
+29	25
+12	13
+12	25
+13	26
+13	30
+13	14
+13	19
+19	20
+19	22
+20	24
+24	21
+24	27
+17	21
+21	27
+21	28
+27	35
+27	34
+28	35
+35	34
+34	23
+34	33
+33	32
+32	23
+32	31
+31	29
+31	26
+27	28
+26	22
+26	30
+23	24
+23	22
+23	20
