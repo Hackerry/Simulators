@@ -21,8 +21,10 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -30,6 +32,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
@@ -59,6 +62,7 @@ public class RouteSimulators extends Application {
 	private boolean customizeEdge = false;
 	private boolean showProbe = true;
 	private Button openFileButton;
+	private String additionalArg;
 
 	@Override
 	public void start(Stage stage) {
@@ -84,6 +88,13 @@ public class RouteSimulators extends Application {
 		stage.show();
 	}
 
+	/**
+	 * Handle process file event (click button on read file).
+	 * 
+	 * @param file        file to read in
+	 * @param messageText the message box to output result
+	 * @param infoText    the area to display output point
+	 */
 	private void processFile(File file, Text messageText, Text infoText) {
 		BufferedReader reader = null;
 		try {
@@ -219,6 +230,14 @@ public class RouteSimulators extends Application {
 		}
 	}
 
+	/**
+	 * Helper method for draw points with given coordinates, fit to the given area.
+	 * 
+	 * @param minX smallest x
+	 * @param minY smallest y
+	 * @param maxX biggest x
+	 * @param maxY biggest y
+	 */
 	private void drawPoints(double minX, double minY, double maxX, double maxY) {
 		double scaleX = (MAIN_WIDTH - 2 * PADDING) / (maxX - minX);
 		double scaleY = (HEIGHT - 2 * PADDING) / (maxY - minY);
@@ -233,6 +252,9 @@ public class RouteSimulators extends Application {
 		log.info("Finished draw points " + points.size());
 	}
 
+	/**
+	 * Calculate paths that interconnect all points.
+	 */
 	private void calculateDefaultEdge() {
 		matrix = new double[points.size()][points.size()];
 
@@ -251,10 +273,18 @@ public class RouteSimulators extends Application {
 		log.info("Default path finished");
 	}
 
+	/**
+	 * Helper method to calculate the shortest path between two points.
+	 */
 	private double euclideanDist(double x1, double y1, double x2, double y2) {
 		return Math.pow(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2), 0.5);
 	}
 
+	/**
+	 * Layout all control panel components.
+	 * 
+	 * @param root the root panel.
+	 */
 	private void layoutControlPanel(BorderPane root) {
 		// Control panel stuff
 		VBox controlPanel = new VBox(10);
@@ -297,6 +327,16 @@ public class RouteSimulators extends Application {
 		showProbeButton.setSelected(true);
 		Button startButton = new Button("Start");
 		startButton.setPrefWidth(CONTROL_WIDTH);
+
+		HBox argBox = new HBox(5);
+		Text argText = new Text("Add. Arg: ");
+		argText.setTextAlignment(TextAlignment.JUSTIFY);
+		argText.setFont(Font.font("Times New Roman", 16));
+		TextField arg = new TextField();
+		arg.setPromptText("Additional argument...");
+		argBox.getChildren().addAll(argText, arg);
+		controlPanel.getChildren().add(argBox);
+
 		openFileButton = new Button("Open file...");
 		Text currFileText = new Text("No File");
 		Text infoText = new Text("");
@@ -368,6 +408,8 @@ public class RouteSimulators extends Application {
 			probeLines.clear();
 			pathLines.clear();
 
+			additionalArg = arg.getText().trim();
+
 			setControlDisable(true);
 			switch (algorithm) {
 			case ASTAR:
@@ -393,6 +435,9 @@ public class RouteSimulators extends Application {
 		root.setLeft(controlPanel);
 	}
 
+	/**
+	 * Run greedy search algorithm.
+	 */
 	private void runGreedy() {
 		simulation = new Thread(() -> {
 			// Reset all points
@@ -471,15 +516,29 @@ public class RouteSimulators extends Application {
 		simulation.start();
 	}
 
+	/**
+	 * Run A star algorithm.
+	 */
 	private void runAStar() {
 		simulation = new Thread(() -> {
+			int constant;
+			try {
+				constant = Integer.parseInt(additionalArg);
+
+				if (constant < 0 || constant > Integer.MAX_VALUE) {
+					throw new Exception("Out of bounds");
+				}
+			} catch (Exception e) {
+				constant = A_STAR_CONSTANT;
+			}
+
 			for (Point p : points) {
 				p.isVisited = false;
 				p.weight = Double.MAX_VALUE;
 				p.prev = null;
 
 				// Calculate all node's estimate distance to end point
-				p.estimateDist = A_STAR_CONSTANT * euclideanDist(p.x, p.y, endPoint.x, endPoint.y);
+				p.estimateDist = constant * euclideanDist(p.x, p.y, endPoint.x, endPoint.y);
 			}
 
 			Point currPoint = startPoint, neighborPoint, tempPoint;
@@ -617,6 +676,9 @@ public class RouteSimulators extends Application {
 		simulation.start();
 	}
 
+	/**
+	 * Run Dijkstra algorithm.
+	 */
 	private void runDijkstra() {
 		simulation = new Thread(() -> {
 			for (Point p : points) {
@@ -760,6 +822,9 @@ public class RouteSimulators extends Application {
 		simulation.start();
 	}
 
+	/**
+	 * Run BFS.
+	 */
 	private void runBFS() {
 		simulation = new Thread(() -> {
 			// Reset all points
@@ -871,6 +936,9 @@ public class RouteSimulators extends Application {
 		simulation.start();
 	}
 
+	/**
+	 * Run DFS.
+	 */
 	private void runDFS() {
 		simulation = new Thread(() -> {
 			// Reset all points
@@ -981,6 +1049,11 @@ public class RouteSimulators extends Application {
 		simulation.start();
 	}
 
+	/**
+	 * Helper method to draw an edge between two points.
+	 * 
+	 * @param probe whether this is a explore path or a path that has been taken.
+	 */
 	private void drawPathTo(final double startX, final double startY, final double endX, final double endY, Color c,
 			double strokeWidth, boolean probe) {
 		// Draw line
@@ -1016,6 +1089,9 @@ public class RouteSimulators extends Application {
 		}
 	}
 
+	/**
+	 * Reset main panel.
+	 */
 	private void resetMainPanel() {
 		setControlDisable(true);
 		edgeList.clear();
@@ -1033,6 +1109,11 @@ public class RouteSimulators extends Application {
 		});
 	}
 
+	/**
+	 * Arrange all Side panel components.
+	 * 
+	 * @param root root panel
+	 */
 	private void layoutSidePanel(BorderPane root) {
 		// Side panel stuff
 		sidePanel = new TextArea();
@@ -1042,6 +1123,11 @@ public class RouteSimulators extends Application {
 		root.setRight(sidePanel);
 	}
 
+	/**
+	 * Helper method to (un)disable all control areas.
+	 * 
+	 * @param stat disable or not
+	 */
 	private void setControlDisable(boolean stat) {
 		Platform.runLater(() -> {
 			for (Control c : controls)
@@ -1049,10 +1135,19 @@ public class RouteSimulators extends Application {
 		});
 	}
 
+	/**
+	 * Driver method.
+	 */
 	public static void main(String[] args) {
 		Application.launch(args);
 	}
 
+	/**
+	 * Inner class for a point(vertex).
+	 * 
+	 * @author Hackerry
+	 *
+	 */
 	private class Point extends Circle {
 		private String label;
 		private double x, y;
