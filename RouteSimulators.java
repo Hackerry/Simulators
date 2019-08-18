@@ -329,7 +329,7 @@ public class RouteSimulators extends Application {
 		startButton.setPrefWidth(CONTROL_WIDTH);
 
 		HBox argBox = new HBox(5);
-		Text argText = new Text("Add. Arg: ");
+		Text argText = new Text("A* Weight: ");
 		argText.setTextAlignment(TextAlignment.JUSTIFY);
 		argText.setFont(Font.font("Times New Roman", 16));
 		TextField arg = new TextField();
@@ -496,7 +496,7 @@ public class RouteSimulators extends Application {
 			// Unconnected graph
 			if (currPoint != endPoint) {
 				setControlDisable(false);
-				System.out.println("Graph is unconnected as far as this I can tell");
+				System.out.println("Graph is unconnected as far as this algorithm goes (no back track for greedy)");
 				return;
 			} else {
 				String label = currPoint.label;
@@ -632,7 +632,7 @@ public class RouteSimulators extends Application {
 
 			// Unconnected graph
 			if (currPoint != endPoint) {
-				System.out.println("Graph is unconnected as far as BFS can tell");
+				System.out.println("Graph is unconnected as far as A* can tell");
 				setControlDisable(false);
 				return;
 			} else {
@@ -778,7 +778,7 @@ public class RouteSimulators extends Application {
 
 			// Unconnected graph
 			if (currPoint != endPoint) {
-				System.out.println("Graph is unconnected as far as BFS can tell");
+				System.out.println("Graph is unconnected as far as Dijkstra can tell");
 				setControlDisable(false);
 				return;
 			} else {
@@ -1002,7 +1002,7 @@ public class RouteSimulators extends Application {
 
 			// Unconnected graph
 			if (currPoint != endPoint) {
-				System.out.println("Graph is unconnected as far as BFS can tell");
+				System.out.println("Graph is unconnected as far as DFS can tell");
 				setControlDisable(false);
 				return;
 			} else {
