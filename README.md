@@ -1,15 +1,15 @@
 # Simulators
-Here is a group of simulators just for fun.
+Here is a group of simulators.<br>
 
-1. Projectile Motion Simulation
-Drawn from basic physics projectile motions.
+<h2>1. Projectile Motion Simulation</h2>
+Drawn from basic physics projectile motions.<br>
 Contains File: ProjectileMotion.java
 
-2. DFS & BFS Maze Solving Simulation
-Visually observe how DFS & BFS work.
+<h2>2. DFS & BFS Maze Solving Simulation</h2>
+Visually observe how DFS & BFS work.<br>
 Contains File: DFSBFSVisualizer.java *.mz
 
-3. The ultimatum Route Simulator
-Visually see how different algorithms work on finding the shortest path from two points.
-Contains File: RouteSimulators.java *.tsv
-Credit to: CSE 100 SP19 staff for the organized data sets for testing and visulization.
+<h2>3. The ultimatum Route Simulator</h2>
+Visually see how different algorithms work on finding the shortest path from two points.<br>
+Contains File: RouteSimulators.java *.tsv<br>
+Credit to: CSE 100 SP19 staff for those data sets.
