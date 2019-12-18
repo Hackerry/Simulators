@@ -10,6 +10,6 @@ Visually observe how DFS & BFS work.<br>
 Contains File: DFSBFSVisualizer.java *.mz
 
 <h2>3. The ultimatum Route Simulator</h2>
-Visually see how different algorithms work on finding the shortest path from two points.<br>
+Visually see how different algorithms work on finding the shortest path between two points.<br>
 Contains File: RouteSimulators.java *.tsv<br>
 Credit to: CSE 100 SP19 staff for those data sets.
